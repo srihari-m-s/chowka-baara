@@ -1,7 +1,10 @@
+import {
+  FiveBoardTileIds,
+  fiveBoardTiles,
+} from "@/routes/r&_private/r&game/game-boards/five-board/const";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { usePlayerStore } from "../player/player-store";
-import { FiveBoardTileIds, fiveBoardTiles } from "./const";
 
 interface FiveBoardTiles {
   [fiveBoardTiles.tileOne]: string[];
