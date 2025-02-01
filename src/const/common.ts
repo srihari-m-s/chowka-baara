@@ -1,6 +1,6 @@
 import { intl } from "@/locales/i18n";
 
-export const TILE_ID_TEXT = "Tile";
+export const TILE_ID_TEXT = "Tile" as const;
 export const PLAYER_ID_TEXT = "Player";
 export const PAWN_ID_TEXT = "Pawn";
 

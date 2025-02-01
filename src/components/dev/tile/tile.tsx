@@ -1,21 +1,17 @@
-import { TILE_ID_TEXT } from "@/const/common";
 import { cn } from "@/lib/utils";
 import { useDroppable } from "@dnd-kit/core";
-import { useMemo } from "react";
+import Pawn from "../pawn/pawn";
 
 interface ITile {
   id: string;
   isHouse: boolean;
   isWinning: boolean;
+  pawns: string[];
 }
 
-export default function Tile({ id, isHouse, isWinning }: ITile) {
-  const tileId = useMemo(() => {
-    return `${TILE_ID_TEXT}-${id}`;
-  }, [id]);
-
+export default function Tile({ id, isHouse, isWinning, pawns }: ITile) {
   const { setNodeRef } = useDroppable({
-    id: tileId,
+    id,
   });
 
   return (
@@ -27,7 +23,11 @@ export default function Tile({ id, isHouse, isWinning }: ITile) {
         isWinning && "bg-green-50"
       )}
     >
-      <div className="p-2"></div>
+      <div className="p-2 h-full w-full grid grid-cols-2 place-items-center overflow-hidden">
+        {pawns.map((item) => {
+          return <Pawn key={item} id={item} tileId={id} />;
+        })}
+      </div>
     </div>
   );
 }

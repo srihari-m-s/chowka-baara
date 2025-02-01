@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
+import { usePlayerStore } from "../player/player-store";
 import { FiveBoardTileIds, fiveBoardTiles } from "./const";
 
 interface FiveBoardTiles {
@@ -35,18 +36,26 @@ interface FiveBoardState {
 }
 
 interface FiveBoardActions {
-  setPawnPosition: (tileId: FiveBoardTileIds, pawnId: string) => void;
+  setPawnPosition: ({
+    oldTileId,
+    newTileId,
+    pawnId,
+  }: {
+    oldTileId: FiveBoardTileIds;
+    newTileId: FiveBoardTileIds;
+    pawnId: string;
+  }) => void;
 }
 
 type FiveBoardStore = FiveBoardState & FiveBoardActions;
 
-const fiveBoardStore = create<FiveBoardStore>()(
+const useFiveBoardStore = create<FiveBoardStore>()(
   immer((set) => ({
     // state
     tiles: {
       [fiveBoardTiles.tileOne]: [],
       [fiveBoardTiles.tileTwo]: [],
-      [fiveBoardTiles.tileThree]: [],
+      [fiveBoardTiles.tileThree]: usePlayerStore.getState().playerThreePawns,
       [fiveBoardTiles.tileFour]: [],
       [fiveBoardTiles.tileFive]: [],
       [fiveBoardTiles.tileSix]: [],
@@ -54,11 +63,11 @@ const fiveBoardStore = create<FiveBoardStore>()(
       [fiveBoardTiles.tileEight]: [],
       [fiveBoardTiles.tileNine]: [],
       [fiveBoardTiles.tileTen]: [],
-      [fiveBoardTiles.tileEleven]: [],
+      [fiveBoardTiles.tileEleven]: usePlayerStore.getState().playerFourPawns,
       [fiveBoardTiles.tileTwelve]: [],
       [fiveBoardTiles.tileThirteen]: [],
       [fiveBoardTiles.tileFourteen]: [],
-      [fiveBoardTiles.tileFifteen]: [],
+      [fiveBoardTiles.tileFifteen]: usePlayerStore.getState().playerTwoPawns,
       [fiveBoardTiles.tileSixteen]: [],
       [fiveBoardTiles.tileSeventeen]: [],
       [fiveBoardTiles.tileEighteen]: [],
@@ -66,18 +75,23 @@ const fiveBoardStore = create<FiveBoardStore>()(
       [fiveBoardTiles.tileTwenty]: [],
       [fiveBoardTiles.tileTwentyOne]: [],
       [fiveBoardTiles.tileTwentyTwo]: [],
-      [fiveBoardTiles.tileTwentyThree]: [],
+      [fiveBoardTiles.tileTwentyThree]:
+        usePlayerStore.getState().playerOnePawns,
       [fiveBoardTiles.tileTwentyFour]: [],
       [fiveBoardTiles.tileTwentyFive]: [],
     },
 
     //
-    setPawnPosition(tileId, pawnId) {
+    setPawnPosition({ oldTileId, newTileId, pawnId }) {
       set((state) => {
-        state.tiles[tileId] = state.tiles[tileId].concat(pawnId);
+        state.tiles[oldTileId] = state.tiles[oldTileId].filter(
+          (id) => id !== pawnId
+        );
+
+        state.tiles[newTileId] = state.tiles[newTileId].concat(pawnId);
       });
     },
   }))
 );
 
-export { fiveBoardStore };
+export { useFiveBoardStore };
