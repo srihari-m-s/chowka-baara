@@ -23,7 +23,7 @@ export default function Tile({ id, isHouse, isWinning, pawns }: ITile) {
         isWinning && "bg-green-50"
       )}
     >
-      <div className="p-2 h-full w-full grid grid-cols-2 place-items-center overflow-hidden">
+      <div className="p-2 h-full w-full grid grid-cols-2 grid-rows-2 place-items-center overflow-hidden">
         {pawns.map((item) => {
           return <Pawn key={item} id={item} tileId={id} />;
         })}
